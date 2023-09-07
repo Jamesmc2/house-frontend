@@ -1,22 +1,28 @@
 import { useState, useEffect } from "react";
 import { HouseIndex } from "./HouseIndex";
+import { HouseNew } from "./HouseNew";
 import axios from "axios";
 
 export function Content() {
   const [houses, setHouses] = useState([]);
 
   const getHouses = () => {
-    console.log("getting houses");
     axios.get("http://localhost:3000/houses.json").then((response) => {
-      console.log(response.data);
       setHouses(response.data);
+    });
+  };
+
+  const createHouse = (params) => {
+    axios.post("http://localhost:3000/houses.json", params).then((response) => {
+      console.log(response.data);
+      setHouses([...houses, response.data]);
     });
   };
 
   useEffect(getHouses, []);
   return (
     <div>
-      <p>This is the content section</p>
+      <HouseNew onCreateHouse={createHouse} />
       <HouseIndex houses={houses} />
     </div>
   );
