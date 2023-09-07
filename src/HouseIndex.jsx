@@ -8,6 +8,7 @@ export function HouseIndex(props) {
           <p>Squarefeet: {house.squarefeet}</p>
           <p>Bedrooms: {house.bedrooms}</p>
           <p>Bathrooms: {house.bathrooms}</p>
+          <button onClick={() => props.showHouse(house)}>More info</button>
         </div>
       ))}
     </div>
