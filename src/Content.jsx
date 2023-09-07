@@ -4,6 +4,7 @@ import { HouseNew } from "./HouseNew";
 import { Modal } from "./Modal";
 import axios from "axios";
 import { HouseShow } from "./HouseShow";
+import { HouseUpdate } from "./HouseUpdate";
 
 export function Content() {
   const [houses, setHouses] = useState([]);
@@ -28,9 +29,23 @@ export function Content() {
   };
 
   const showHouse = (house) => {
-    console.log(house);
     setShowModal(true);
     setCurrentHouse(house);
+  };
+
+  const handleUpdate = (params, id) => {
+    axios.patch(`http://localhost:3000/houses/${id}.json`, params).then((response) => {
+      setCurrentHouse(response.data);
+      setHouses(
+        houses.map((house) => {
+          if (house.id === id) {
+            return response.data;
+          } else {
+            return house;
+          }
+        })
+      );
+    });
   };
 
   useEffect(getHouses, []);
@@ -40,6 +55,7 @@ export function Content() {
       <HouseIndex houses={houses} showHouse={showHouse} />
       <Modal show={showModal} onClose={closeModal}>
         <HouseShow house={currentHouse} />
+        <HouseUpdate house={currentHouse} handleUpdate={handleUpdate} />
       </Modal>
     </div>
   );
